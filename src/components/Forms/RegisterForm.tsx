@@ -6,18 +6,20 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { register } from "../../hooks/useAuth";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const RegisterForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
 
+  const router = useRouter();
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     register(name, email, pwd);
-    redirect("/");
+    router.replace("/");
   };
   return (
     <div className="flex flex-col gap-4">
