@@ -1,5 +1,3 @@
-import { TSignup } from "@/lib/types";
-
 export const signUp = async (
   name: string,
   email: string,
