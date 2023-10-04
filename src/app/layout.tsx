@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AuthProvider } from "./Providers";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +22,7 @@ export default function RootLayout({
         <main className="flex flex-col justify-center items-center">
           <AuthProvider>{children}</AuthProvider>
         </main>
+        <Toaster />
       </body>
     </html>
   );

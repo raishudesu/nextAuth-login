@@ -1,4 +1,4 @@
-export const register = async (name: string, email: string, pwd: string) => {
+export const signUp = async (name: string, email: string, pwd: string) => {
   try {
     const res = await fetch("/api/register", {
       method: "POST",
@@ -13,6 +13,7 @@ export const register = async (name: string, email: string, pwd: string) => {
     });
     const data = await res.json();
     console.log(data);
+    return data;
   } catch (error) {
     console.log(error);
   }

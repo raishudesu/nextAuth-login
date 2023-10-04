@@ -1,21 +1,49 @@
 "use client";
 
-import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { TSignin } from "@/lib/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SigninSchema } from "@/lib/schemas";
+import { toast } from "../ui/use-toast";
 
 const SigninForm = () => {
-  const [email, setEmail] = useState("");
-  const [pwd, setPwd] = useState("");
   const router = useRouter();
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TSignin>({
+    resolver: zodResolver(SigninSchema),
+    defaultValues: {
+      email: "", // Set your default email value here
+      pwd: "", // Set your default password value here
+    },
+  });
 
+  const failedToast = () => {
+    toast({
+      variant: "destructive",
+      title: "Uh oh! Something went wrong.",
+      description: "Please try again later.",
+    });
+  };
+
+  const successToast = () => {
+    toast({
+      title: "Success!",
+      description: "Logged in successfully.",
+    });
+  };
+
+  const formSubmit = async (data: TSignin) => {
+    const { email, pwd } = data;
     try {
       const res = await signIn("credentials", {
         email,
@@ -24,30 +52,32 @@ const SigninForm = () => {
       });
 
       if (res?.error) {
-        console.log("Error");
+        failedToast();
         return;
       }
+
+      successToast();
       router.replace("dashboard");
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <div className="flex flex-col gap-4">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form
+        onSubmit={handleSubmit(formSubmit)}
+        className="flex flex-col gap-4 max-w-[300px]"
+      >
         <Label className="text-2xl">Sign in</Label>
-        <Input
-          type="text"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Input
-          type="password"
-          placeholder="Password"
-          value={pwd}
-          onChange={(e) => setPwd(e.target.value)}
-        />
+        <Input {...register("email")} type="text" placeholder="Email" />
+        {errors.email && (
+          <span className="text-red-500 text-sm">{errors.email.message}</span>
+        )}
+        <Input {...register("pwd")} type="password" placeholder="Password" />
+        {errors.pwd && (
+          <span className="text-red-500 text-sm">{errors.pwd.message}</span>
+        )}
         <Button type="submit">Sign in</Button>
       </form>
       <Label>
