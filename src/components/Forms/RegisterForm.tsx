@@ -46,9 +46,9 @@ const RegisterForm = () => {
   };
 
   const formSubmit = async (data: TSignup) => {
-    const { name, email, pwd } = data;
+    const { name, email, pwd, confirmPwd } = data;
     try {
-      const res = await signUp(name, email, pwd);
+      const res = await signUp(name, email, pwd, confirmPwd);
       if (!res.success) {
         failedToast(res.msg);
         return;

@@ -5,7 +5,7 @@ import connectDB from "@/lib/mongodb";
 
 export const POST = async (req: NextRequest) => {
   try {
-    const { name, email, pwd } = await req.json();
+    const { name, email, pwd, confirmPwd } = await req.json();
     const hashedPwd = await bcrypt.hash(pwd, 10);
 
     await connectDB();
@@ -17,6 +17,14 @@ export const POST = async (req: NextRequest) => {
         status: 400,
         msg: "User already exists",
       });
+
+    if (pwd !== confirmPwd) {
+      return NextResponse.json({
+        success: false,
+        status: 400,
+        msg: "Passwords do not match",
+      });
+    }
 
     await User.create({ name, email, password: hashedPwd });
 

@@ -1,4 +1,11 @@
-export const signUp = async (name: string, email: string, pwd: string) => {
+import { TSignup } from "@/lib/types";
+
+export const signUp = async (
+  name: string,
+  email: string,
+  pwd: string,
+  confirmPwd: string
+) => {
   try {
     const res = await fetch("/api/register", {
       method: "POST",
@@ -9,6 +16,7 @@ export const signUp = async (name: string, email: string, pwd: string) => {
         name,
         email,
         pwd,
+        confirmPwd,
       }),
     });
     const data = await res.json();
