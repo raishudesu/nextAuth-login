@@ -20,6 +20,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <meta
+        property="og:image"
+        content="https://testrigor.com/wp-content/uploads/2023/04/nextjs-logo-square.png"
+      ></meta>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
