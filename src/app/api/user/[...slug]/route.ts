@@ -1,20 +1,21 @@
 import connectDB from "@/lib/mongodb";
 import User from "@/models/user";
+import { NextApiRequest } from "next";
 import { NextResponse } from "next/server";
 
 type TUserParams = {
-  id: string;
+  slug: string[];
 };
 
 export const GET = async (
   req: Request,
   { params }: { params: TUserParams }
 ) => {
+  const { slug } = params;
   try {
-    const { id } = params;
     await connectDB();
 
-    const user = await User.findById(id);
+    const user = await User.findById(slug[0]);
 
     if (!user) {
       return NextResponse.json(
